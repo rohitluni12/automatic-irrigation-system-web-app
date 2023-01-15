@@ -53,7 +53,7 @@ const Login = () => {
                 id="password"
               />
             </div>
-            {error && <p className="">{error}</p>}
+            {error && <p className="text-teal-500 text-2xl">{error}</p>}
 
             <input
               type="submit"
