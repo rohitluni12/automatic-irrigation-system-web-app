@@ -1,91 +1,95 @@
 import React from "react";
-import './index.css';
+import Layout from "../../Layout/index";
 const Home = () => {
   return (
     <>
-      <div class="head-section ">
-        <div class="status">
-          Status: <span id="motor-status">OFF</span>
-        </div>
-        <div class="login" id="login-btn">
-          Login
-        </div>
-        <div id="google_translate_element"></div>
-      </div>
-
-      {/* <!--card layout start--> */}
-      <div class="container">
-        <h1>Live Sensor Data</h1>
-        {/* <!-- live status bar section start --> */}
-        <div class="row">
-          <div class="card-01"><span  id="temp">Temperature <img src="svg/temp-svg.svg" width="25px"/>: <span id="temp_live_data">0 C</span></span>
-            <select class="select_sensor" id="display_temp_sensor">
-              <option disabled ></option>
-              {/* <!-- <option value="Average" selected >Average: <span id="display_temp_avg">10</span></option> --> */}
-            </select>
-          </div>
-          <div class="card-02"><span id="soil-moisture">Soil Moisture <img src="svg/soil.svg" width="25px"/>: <span id="soil_live_data">0</span></span>
-            <select class="select_sensor" id="display-soilMoisture-sensor">
-              {/* <!-- <option value="Average" selected>Average: 45</option> --> */}
-              <option disabled></option>
-          </select>
-          </div>
-          <div class="card-03"><span  id="humidity">Humidity <img src="svg/rain.svg" width="25px"/>: <span id="hum_live_data">0%</span></span> 
-            <select class="select_sensor" id="display-humidity-sensor">
-              {/* <!-- <option value="Average" selected>Average: 800</option> --> */}
-              <option disabled></option>
-            </select>
-          </div>
-        </div>
-        {/* <!-- live status bar section end--> */}
-
-        {/* <!-- manual mode section start--> */}
-        <h1>Manual and Auto</h1>
-
-        <div class="row">
-          <div class="card-04" id="card-cp"><h3 class="force-start"id="start-stop">Force Start</h3><hr />
-            <label class="set-crop-text">Set Crops</label>
-            <select name="crop"id="select-crop">
-            </select><hr/>
-            <h3 id="cp">Temperature : <span id="var-temp">35</span><span style="color:#00cc99">&#8451;</span></h3>
-            {/* <!-- <Input class="range"id="range1" type="range" value="35" min="20" max="60" onChange="temp_rs(this.value),temp_threshold_value()" ontouchmove="temp_rs(this.value)" onmousemove="temp_rs(this.value)"></Input> --> */}
-            <h3 id="cp">Soil Moisture : <span id="var-soil-moisture">512</span></h3>
-            {/* <!-- <Input class="range"id="range2" type="range" value="512" min="0" max="1023" onChange="soil_Moisture_rs(this.value),soil_Moisture_threshold_value()" ontouchmove="soil_Moisture_rs(this.value)" onmousemove="soil_Moisture_rs(this.value)"></Input> --> */}
-            <h3 id="cp">Humidity : <span id="var-humidity">45</span><span style="color:#00cc99">%</span></h3>
-            {/* <!-- <Input class="range"id="range3" type="range" value="45" min="20" max="70" onChange="humidity_rs(this.value),humidity_threshold_value()" ontouchmove="humidity_rs(this.value)" onmousemove="humidity_rs(this.value)"></Input> --> */}
-          </div>
-        </div>
-        <h1>Set Timer</h1>
-
-        <div class="row">
-          <div class="wrapper">
-            <h1 id="current_time">00:00:00 PM</h1>
-            <div class="content">
-              <div class="column">
-                <select class="select_time">
-                  <option value="Hour" selected disabled hidden>Hour</option>
-                </select>
-              </div>
-              <div class="column">
-                <select class="select_time">
-                  <option value="Minute" selected disabled hidden>Minute</option>
-                </select>
-              </div>
-              <div class="column">
-                <select class="select_time">
-                  <option value="AM/PM" selected disabled hidden>AM/PM</option>
-                </select>
-              </div>
-              <div class="column">
-                <select class="select_time">
-                  <option value="Limit" selected disabled hidden>Limit</option>
-                </select>
+      <Layout />
+      <section className="relative top-10  left-0 w-full flex justify-center">
+        {/* // <!-- Component Start --> */}
+        <div class="flex flex-wrap justify-center gap-6 w-full max-w-6xl m-2">
+          {/* <!-- Tile 1 --> */}
+          <div class="flex items-center p-4 bg-slate-200 rounded-xl">
+            <div class="flex flex-shrink-0 items-center justify-center bg-green-200 h-16 w-16 rounded">
+              <svg
+                class="w-6 h-6 fill-current text-green-700"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <div class="flex-grow flex flex-col ml-4">
+              <span class="text-xl font-bold">$8,430</span>
+              <div class="flex items-center justify-between">
+                <span class="text-gray-500">Revenue last 30 days</span>
+                <span class="text-green-500 text-sm font-semibold ml-2">
+                  +12.6%
+                </span>
               </div>
             </div>
-            <button>Set Timer</button>
+          </div>
+
+          {/* <!-- Tile 2 --> */}
+          <div class="flex items-center p-4 bg-slate-200 rounded-xl">
+            <div class="flex flex-shrink-0 items-center justify-center bg-red-200 h-16 w-16 rounded">
+              <svg
+                class="w-6 h-6 fill-current text-red-700"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <div class="flex-grow flex flex-col ml-4">
+              <span class="text-xl font-bold">$8,430</span>
+              <div class="flex items-center justify-between">
+                <span class="text-gray-500">Revenue last 30 days</span>
+                <span class="text-red-500 text-sm font-semibold ml-2">
+                  -8.10%
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* <!-- Tile 3 --> */}
+          <div class="flex items-center p-4 bg-slate-200 rounded-xl">
+            <div class="flex flex-shrink-0 items-center justify-center bg-green-200 h-16 w-16 rounded">
+              <svg
+                class="w-6 h-6 fill-current text-green-700"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <div class="flex-grow flex flex-col ml-4">
+              <span class="text-xl font-bold">140</span>
+              <div class="flex items-center justify-between">
+                <span class="text-gray-500">Customers last 30 days</span>
+                <span class="text-green-500 text-sm font-semibold ml-2">
+                  +28.4%
+                </span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+        {/* // <!-- Component End  --> */}
+      </section>
     </>
   );
 };
