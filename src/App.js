@@ -1,31 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Layout from "./Layout/Layout";
 import NotFound from "./Pages/NotFound";
 import SignIn from "./Pages/SignIn";
 import SignUp from "./Pages/SignUp";
-import { fetchUser, userAccessToken } from "./Utils/fetchUser";
+import { UserAuthContextProvider } from "./Contexts/AuthContext";
+import ProtectedRouter from "./Router/ProtectedRouter";
 function App() {
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const accessToken = userAccessToken();
-    if (!accessToken) {
-      navigate("/signin", { replace: true });
-    } else {
-      const [userInfo] = fetchUser();
-      setUser(userInfo);
-    }
-  }, []);
-
   return (
-    <Routes>
-      <Route path="signIn" element={<SignIn />} />
-      <Route path="signUp" element={<SignUp />} />
-      <Route path="/*" element={<Layout user={user} />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <UserAuthContextProvider>
+      <Routes>
+        <Route path="signIn" element={<SignIn />} />
+        <Route path="signUp" element={<SignUp />} />
+        <Route
+          path="/*"
+          element={
+            <ProtectedRouter>
+              <Layout />
+            </ProtectedRouter>
+          }
+        />
+        <Route path="*" element={<NotFound h1={"404"} />} />
+      </Routes>
+    </UserAuthContextProvider>
   );
 }
 

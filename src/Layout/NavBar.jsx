@@ -1,21 +1,15 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
+import { useUserAuth } from "../Contexts/AuthContext";
 
-const NavBar = ({ menu, setMenu, user }) => {
-  const [userMemu, setUserMemu] = useState(false);
-
+const NavBar = ({ menu, setMenu }) => {
+  const [userMenu, setUserMenu] = useState(false);
+  const { logOut, user } = useUserAuth();
   const navigate = useNavigate();
-
-  function logOut() {
-    return signOut(auth);
-  }
 
   const handleLogout = () => {
     logOut();
-    navigate("/signin");
-    localStorage.clear();
+    navigate("/signIn");
   };
 
   return (
@@ -50,7 +44,7 @@ const NavBar = ({ menu, setMenu, user }) => {
                 alt="dustbin logo"
               /> */}
               <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
-                MRP
+                Currency Checker
               </span>
             </Link>
           </div>
@@ -62,7 +56,7 @@ const NavBar = ({ menu, setMenu, user }) => {
                   className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                   aria-expanded="true"
                   data-dropdown-toggle="dropdown-user"
-                  onClick={() => setUserMemu(!userMemu)}
+                  onClick={() => setUserMenu(!userMenu)}
                 >
                   <span className="sr-only">Open user menu</span>
                   <img
@@ -78,7 +72,7 @@ const NavBar = ({ menu, setMenu, user }) => {
               </div>
               <div
                 className={`${
-                  userMemu ? "" : "hidden"
+                  userMenu ? "" : "hidden"
                 } z-50 my-4 absolute duration-1000 right-6 top-16 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600`}
               >
                 <div className="px-4 py-3 " role="none">
@@ -98,34 +92,16 @@ const NavBar = ({ menu, setMenu, user }) => {
                 <ul className="py-1" role="none">
                   <li>
                     <Link
-                      to="/"
+                      to="/Dashboard"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                       role="menuitem"
                     >
                       Dashboard
                     </Link>
                   </li>
-                  {/* <li>
-                    <Link
-                      to="/listAll"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                      role="menuitem"
-                    >
-                      Settings
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/dustbinDetail/:dustbinId"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                      role="menuitem"
-                    >
-                      Earnings
-                    </Link>
-                  </li> */}
                   <li>
                     <a
-                      href="#"
+                      href={""}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                       role="menuitem"
                       onClick={handleLogout}

@@ -1,43 +1,24 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { ref, set } from "firebase/database";
-import { auth, db } from "../firebase";
+import { useUserAuth } from "../Contexts/AuthContext";
+
 const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { signUp } = useUserAuth();
 
   const navigate = useNavigate();
 
-  function signUp(email, password) {
-    return createUserWithEmailAndPassword(auth, email, password);
-  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     try {
       setLoading(true);
-      const { user } = await signUp(email, password);
-      const { refreshToken, providerData } = user;
-
-      localStorage.setItem("user", JSON.stringify(providerData));
-      localStorage.setItem("accessToken", JSON.stringify(refreshToken));
-
-      set(ref(db, "/Users" + user.uid), {
-        name: name,
-        Details: providerData[0],
-        provider: "Sign Up With Email and Password",
-      });
-      // await setDoc(doc(fdb, "/Users", user.uid), {
-      //   name: name,
-      //   Details: providerData[0],
-      //   provider:"Sign Up With Email and Password"
-      // });
-
-      navigate("/signin", { replace: true });
+      await signUp(email, password);
+      navigate("/signIn");
     } catch (err) {
       setError(err.message);
     }

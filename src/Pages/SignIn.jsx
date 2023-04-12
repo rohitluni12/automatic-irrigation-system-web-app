@@ -1,28 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import {
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from "firebase/auth";
-import { ref, set } from "firebase/database";
-
-import { auth, db } from "../firebase";
+import { useUserAuth } from '../Contexts/AuthContext';
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const { logIn, googleSignIn } = useUserAuth();
+
   const navigate = useNavigate();
-
-  function logIn(email, password) {
-    return signInWithEmailAndPassword(auth, email, password);
-  }
-
-  function googleSignIn() {
-    const googleAuthProvider = new GoogleAuthProvider();
-    return signInWithPopup(auth, googleAuthProvider);
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,10 +16,9 @@ const SignIn = () => {
     try {
       setLoading(true);
       await logIn(email, password);
-
-      navigate("/");
-    } catch (err) {
-      setError(err.message);
+      navigate("/Dashboard");
+    } catch (error) {
+      setError(error.message);
     }
     setLoading(false);
   };
@@ -42,22 +27,10 @@ const SignIn = () => {
     e.preventDefault();
     setError("");
     try {
-      const { user } = await googleSignIn();
-      const { refreshToken, providerData } = user;
-
-      localStorage.setItem("user", JSON.stringify(providerData));
-      localStorage.setItem("accessToken", JSON.stringify(refreshToken));
-
-      // await setDoc(doc(fdb, "/Users", providerData[0].uid), providerData[0]);
-
-      await set(ref(db, "/Users" + providerData[0].uid), {
-        Details: providerData[0],
-        provider: "Log in with Google",
-      });
-      navigate("/", { replace: true });
-    } catch (err) {
-      console.log(err.message);
-      setError(err.message);
+      await googleSignIn();
+      navigate("/Dashboard");
+    } catch (error) {
+      setError(error.message);
     }
   };
 
