@@ -7,6 +7,7 @@ import HomePage from "../Pages/Dashboard";
 import NotFound from "../Pages/NotFound";
 import UserInfo from "../Pages/UserInfo";
 import Records from "../Pages/Records";
+import SetTimer from "../Pages/SetTimer";
 const Layout = () => {
   const [menu, setMenu] = useState(true);
   return (
@@ -21,6 +22,8 @@ const Layout = () => {
             <Route path="*" element={<NotFound />} />
             <Route path="/User-Info" element={<UserInfo />} /> 
             <Route path="/Records" element={<Records />} />
+            <Route path="/Set-Timer" element={<SetTimer />} />
+
           </Routes>
         </div>
       </div>

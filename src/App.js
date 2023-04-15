@@ -20,7 +20,7 @@ function App() {
             </ProtectedRouter>
           }
         />
-        <Route path="*" element={<NotFound h1={"404"} />} />
+        <Route path="*" element={<NotFound h1={"404"}/>} />
       </Routes>
     </UserAuthContextProvider>
   );

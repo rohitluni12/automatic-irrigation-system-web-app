@@ -8,7 +8,7 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signUp } = useUserAuth();
+  const { handleSignUp } = useUserAuth();
 
   const navigate = useNavigate();
 
@@ -17,7 +17,7 @@ const SignUp = () => {
     setError("");
     try {
       setLoading(true);
-      await signUp(email, password);
+      await handleSignUp(email, password);
       navigate("/signIn");
     } catch (err) {
       setError(err.message);

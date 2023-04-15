@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-const NotFound = ({Heading,SubHeading,Desc,link}) => {
+const NotFound = ({Heading,SubHeading,Desc}) => {
   return (
     <section className="bg-white dark:bg-gray-900">
       <div className="max-w-screen-xl px-4 py-8 mx-auto lg:py-16 lg:px-6">
@@ -17,10 +17,10 @@ const NotFound = ({Heading,SubHeading,Desc,link}) => {
             {Desc}
           </p>
           <Link
-            to={`${link}`}
+            to={'/Dashboard'}
             className="inline-flex text-white bg-teal-600 hover:bg-teal-500 focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-primary-900 my-4"
           >
-            Back to {link}
+            Back to Dashboard
           </Link>
         </div>
       </div>

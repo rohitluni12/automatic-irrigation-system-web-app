@@ -4,11 +4,10 @@ import { useUserAuth } from "../Contexts/AuthContext";
 
 const NavBar = ({ menu, setMenu }) => {
   const [userMenu, setUserMenu] = useState(false);
-  const { logOut, user } = useUserAuth();
+  const { handleLogout, user, motorStatus } = useUserAuth();
   const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logOut();
+  const handleSubmit = () => {
+    handleLogout();
     navigate("/signIn");
   };
 
@@ -44,11 +43,14 @@ const NavBar = ({ menu, setMenu }) => {
                 alt="dustbin logo"
               /> */}
               <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
-                Currency Checker
+                AIS
               </span>
             </Link>
           </div>
           <div className="flex items-center">
+            <div className="p-2 mx-4 rounded-md bg-slate-200">
+              Motor: <span className="text-teal-500">{motorStatus}</span>
+            </div>
             <div className="flex items-center ml-3 mr-10">
               <div className="relative ">
                 <button
@@ -73,7 +75,7 @@ const NavBar = ({ menu, setMenu }) => {
               <div
                 className={`${
                   userMenu ? "" : "hidden"
-                } z-50 my-4 absolute duration-1000 right-6 top-16 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600`}
+                } z-50 my-4 absolute duration-1000 w-60 md:w-auto right-6 top-16 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600`}
               >
                 <div className="px-4 py-3 " role="none">
                   <p
@@ -104,7 +106,7 @@ const NavBar = ({ menu, setMenu }) => {
                       href={""}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                       role="menuitem"
-                      onClick={handleLogout}
+                      onClick={handleSubmit}
                     >
                       Sign out
                     </a>
