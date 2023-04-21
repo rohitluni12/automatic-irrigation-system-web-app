@@ -20,6 +20,7 @@ export function UserAuthContextProvider({ children }) {
   const [allSensorData, setAllSensorData] = useState();
 
   const [motorStatus, setMotorStatus] = useState(null);
+  const [alarms, setAlarms] = useState([]);
 
   function handleLogin(email, password) {
     return signInWithEmailAndPassword(auth, email, password);
@@ -91,6 +92,26 @@ export function UserAuthContextProvider({ children }) {
     // clean up function to unsubscribe from the auth state listener
     return unsubscribe;
   }, [userRole]); // re-run the effect only when userRole changes
+
+  // when the motorstatus is change then update the database with the new motor status value
+  useEffect(() => {
+    if(motorStatus == "ON"){
+      const dbRef = ref(db, "Motor Status");
+      set(dbRef, {
+        motor_status: true,
+      });
+    }
+    else if(motorStatus == "OFF"){
+      const dbRef = ref(db, "Motor Status");
+      set(dbRef, {
+        motor_status: false,
+      });
+    }
+
+    
+  },[motorStatus]);
+
+ 
   if (!isInitialized) {
     // Show loading spinner or something until Firebase is initialized
     return <div>Loading...</div>;
@@ -101,11 +122,13 @@ export function UserAuthContextProvider({ children }) {
     sensorData,
     allSensorData,
     motorStatus,
+    alarms,
     handleLogin,
     handleSignUp,
     handleLogout,
     handleGoogleSignIn,
     setMotorStatus,
+    setAlarms,
   };
 
   return (
