@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+
 import { useUserAuth } from "../Contexts/AuthContext";
+
 const SetTimer = () => {
   const [hours, setHours] = useState("00");
   const [minutes, setMinutes] = useState("00");
@@ -8,13 +11,11 @@ const SetTimer = () => {
   const [currentTime, setCurrentTime] = useState(
     new Date().toLocaleTimeString()
   );
-  // const [alarms, setAlarms] = useState([]);
   const [newTime, setNewTime] = useState({});
   const [playing, setPlaying] = useState(false);
+
   const [message, setMessage] = useState("");
-
-  const { setMotorStatus,alarms,setAlarms } = useUserAuth();
-
+  const { alarms, setAlarms } = useUserAuth();
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date().toLocaleTimeString());
@@ -26,89 +27,39 @@ const SetTimer = () => {
   }, []);
 
   useEffect(() => {
-    console.log(alarms);
-    if (alarms.length > 0) {
-      const interval = setInterval(() => {
-        const now = new Date();
-        const currentAlarm = alarms.find((alarm) => {
-          let [hours, minutes] = alarm.time.split(":");
-          setNewTime({
-            time: alarm.hours + ":" + alarm.minutes,
-            hours: alarm.hours,
-            minutes: alarm.minutes,
-            duration: alarm.duration,
-          });
-          return (
-            convertTo12HourFormat(now.getHours()) === parseInt(hours) &&
-            now.getMinutes() === parseInt(minutes)
-          );
-        });
-        if (currentAlarm || playing === true) {
-          setMotorStatus("ON");
-          console.log("Alarm is on");
-          setPlaying(true);
-          setMessage("Your Timer is Started");
-        }
+    const fetchTimerData = async () => {
+      const response = await axios.get("http://localhost:4000/timer");
+      setMessage(response.data.message);
+    };
+    fetchTimerData();
 
-        let newMinutes = parseInt(newTime.minutes) + parseInt(newTime.duration);
-        let newHours = parseInt(newTime.hours);
-        if (newMinutes >= 60) {
-          newHours += Math.floor(newMinutes / 60);
-          newMinutes %= 60;
-        }
-        newHours %= 12;
-        if (newHours === 0) {
-          newHours = 12;
-        }
+    const interval = setInterval(() => {
+      fetchTimerData();
+    }, 5000);
 
-        if (
-          convertTo12HourFormat(now.getHours()) === parseInt(newHours) &&
-          now.getMinutes() === parseInt(newMinutes)
-        ) {
-          setMotorStatus("OFF");
-          console.log("Alarm is off");
-          setPlaying(false);
-          setMessage("Your Timer is OFF");
-          setAlarms(
-            alarms.filter((alarm) => {
-              return alarm.time !== newTime.time;
-            })
-          );
-        }
-      }, 1000);
-      return () => clearInterval(interval);
-    }
-  }, [alarms, duration, setMotorStatus, playing]);
+    return () => clearInterval(interval);
+  }, [setMessage]);
 
-  const handleSetTimer = () => {
+  const handleAddAlarm = () => {
     const newAlarm = {
       hours,
       minutes,
       amPm,
       duration,
-      time: hours + ":" + minutes,
     };
 
-    setAlarms([...alarms, newAlarm]);
-  };
-
-  const convertTo12HourFormat = (hours) => {
-    if (hours === 0) {
-      return 12;
-    } else if (hours > 12) {
-      return hours - 12;
-    } else {
-      console.log(hours);
-      return hours;
-    }
+    axios.post("http://localhost:4000/alarms", newAlarm).then((response) => {
+      setAlarms([...alarms, newAlarm]);
+      console.log(response.data);
+      setMessage(response.data.message);
+    });
   };
 
   const handleRemoveAlarm = (index) => {
-    setAlarms(alarms.filter((alarm, i) => i !== index));
-    setMotorStatus("OFF");
-    console.log("Alarm is off");
-    setPlaying(false);
-    setMessage("Your Timer is OFF");
+    axios.delete(`http://localhost:4000/alarms/${index}`).then((response) => {
+      setAlarms(alarms.filter((alarm, i) => i !== index));
+      setMessage(response.data.message);
+    });
   };
 
   return (
@@ -124,10 +75,11 @@ const SetTimer = () => {
         <div className="flex flex-col justify-center">
           <div className="flex flex-wrap items-center justify-center gap-2 my-4">
             <select
+              defaultValue="Hours"
               onChange={(e) => setHours(e.target.value)}
               className="h-10 overflow-y-scroll text-xl bg-teal-400 rounded-md cursor-pointer text-slate-50"
             >
-              <option value="Hours" selected disabled hidden>
+              <option value="Hours" disabled hidden>
                 Hours
               </option>
               {[...Array(12)].map((_, i) => (
@@ -137,10 +89,11 @@ const SetTimer = () => {
               ))}
             </select>
             <select
+              defaultValue="Minutes"
               onChange={(e) => setMinutes(e.target.value)}
               className="h-10 text-xl bg-teal-400 rounded-md cursor-pointer text-slate-50"
             >
-              <option value="Minutes" selected disabled hidden>
+              <option value="Minutes" disabled hidden>
                 Minutes
               </option>
               {[...Array(60)].map((_, i) => (
@@ -150,20 +103,22 @@ const SetTimer = () => {
               ))}
             </select>
             <select
+              defaultValue="AM/PM"
               onChange={(e) => setAmPm(e.target.value)}
               className="h-10 text-xl bg-teal-400 rounded-md cursor-pointer text-slate-50"
             >
-              <option value="AM/PM" selected disabled hidden>
+              <option value="AM/PM" disabled hidden>
                 AM/PM
               </option>
               <option>AM</option>
               <option>PM</option>
             </select>
             <select
+              defaultValue="Limit"
               onChange={(e) => setDuration(e.target.value)}
               className="h-10 text-xl bg-teal-400 rounded-md cursor-pointer text-slate-50"
             >
-              <option value="Limit" selected disabled hidden>
+              <option value="Limit" disabled hidden>
                 Limits
               </option>
               {[...Array(60)].map((_, i) => (
@@ -181,7 +136,7 @@ const SetTimer = () => {
           )}
 
           <button
-            onClick={handleSetTimer}
+            onClick={handleAddAlarm}
             className="flex items-center justify-center h-12 mx-10 my-4 text-2xl bg-teal-400 rounded-md cursor-pointer text-slate-50"
           >
             Add Timer
@@ -193,7 +148,7 @@ const SetTimer = () => {
             >
               <div className="flex items-center justify-center w-1/2">
                 <h2 className="text-xl font-medium text-teal-500">
-                  {alarm.time} {alarm.amPm}
+                  {alarm.hours + ":" + alarm.minutes} {alarm.amPm}
                 </h2>
               </div>
               <div className="flex items-center justify-center w-1/4">
